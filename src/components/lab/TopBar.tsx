@@ -5,7 +5,6 @@ import {
   AlertTriangle,
   RotateCcw,
   OctagonX,
-  Radio,
   Cpu,
   Binary,
 } from "lucide-react";
@@ -40,8 +39,19 @@ export const TopBar: React.FC<TopBarProps> = ({
       <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
         {/* Left: Branding & Tagline */}
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-sky-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-sky-500/20">
-            <Radio className="w-4 h-4 text-white animate-pulse" />
+          <div className="w-8 h-8 rounded-lg bg-slate-900 border border-sky-500/40 flex items-center justify-center shadow-lg shadow-sky-500/20 overflow-hidden">
+            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none">
+              <line x1="6" y1="18" x2="18" y2="18" stroke="#38bdf8" strokeWidth="1.5" />
+              <line x1="6" y1="6" x2="18" y2="6" stroke="#38bdf8" strokeWidth="1.5" />
+              <line x1="6" y1="18" x2="6" y2="6" stroke="#38bdf8" strokeWidth="1.5" />
+              <line x1="18" y1="18" x2="18" y2="6" stroke="#38bdf8" strokeWidth="1.5" />
+              <line x1="6" y1="18" x2="18" y2="6" stroke="#818cf8" strokeWidth="1.5" />
+              <line x1="6" y1="6" x2="18" y2="18" stroke="#06b6d4" strokeWidth="1.5" strokeDasharray="2 1.5" />
+              <circle cx="6" cy="18" r="2" fill="#0284c7" />
+              <circle cx="18" cy="18" r="2" fill="#0284c7" />
+              <circle cx="6" cy="6" r="2" fill="#6366f1" />
+              <circle cx="18" cy="6" r="2.2" fill="#f59e0b" />
+            </svg>
           </div>
           <div>
             <div className="flex items-center gap-2">

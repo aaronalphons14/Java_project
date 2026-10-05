@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Sleek dark background squircle -->
+  <rect width="64" height="64" rx="14" fill="#030712" />
+  <rect x="1" y="1" width="62" height="62" rx="13" stroke="#1e293b" stroke-width="1.5" />
+  
+  <!-- Subtle topological coordinate grid -->
+  <path d="M16 32h32M32 16v32" stroke="#0f172a" stroke-width="1" stroke-dasharray="2 2"/>
+  
+  <!-- Truss Members / Struts -->
+  <!-- Outer perimeter -->
+  <line x1="16" y1="48" x2="48" y2="48" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" />
+  <line x1="16" y1="16" x2="48" y2="16" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" />
+  <line x1="16" y1="48" x2="16" y2="16" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" />
+  <line x1="48" y1="48" x2="48" y2="16" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" />
+  <!-- Diagonals -->
+  <line x1="16" y1="48" x2="48" y2="16" stroke="#818cf8" stroke-width="2" stroke-linecap="round" />
+  <line x1="16" y1="16" x2="48" y2="48" stroke="#06b6d4" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 2" />
+  
+  <!-- Nodes (Pin joints) -->
+  <!-- Bottom-left (Node A: Pin support) -->
+  <circle cx="16" cy="48" r="4.5" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5" />
+  <circle cx="16" cy="48" r="1.5" fill="#f8fafc" />
+  
+  <!-- Bottom-right (Node B: Roller support) -->
+  <circle cx="48" cy="48" r="4.5" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5" />
+  <circle cx="48" cy="48" r="1.5" fill="#f8fafc" />
+  
+  <!-- Top-left (Node C) -->
+  <circle cx="16" cy="16" r="4.5" fill="#6366f1" stroke="#818cf8" stroke-width="1.5" />
+  <circle cx="16" cy="16" r="1.5" fill="#f8fafc" />
+  
+  <!-- Top-right (Node D: Active load application point) -->
+  <circle cx="48" cy="16" r="5" fill="#f59e0b" stroke="#fbbf24" stroke-width="1.5" />
+  <circle cx="48" cy="16" r="2" fill="#fffbeb" />
+  
+  <!-- Load Vector Arrow at Node D -->
+  <path d="M48 6v5m0 0l-2-2m2 2l2-2" stroke="#f59e0b" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
