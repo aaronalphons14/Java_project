@@ -104,9 +104,10 @@ function LoadTopologyLab() {
   const [currentView, setCurrentView] = useState<LabViewId>("dashboard");
 
   // Topology State
-  const [mask, setMask] = useState<number>(() =>
-    readLocal<number>("LOAD_TOPOLOGY_MASK", DEFAULT_TOPLOGY_MASK)
-  );
+  const [mask, setMask] = useState<number>(() => {
+    const saved = readLocal<number>("LOAD_TOPOLOGY_MASK", DEFAULT_TOPLOGY_MASK);
+    return saved > 0 && saved < 64 ? saved : DEFAULT_TOPLOGY_MASK;
+  });
   const [activeLoadCase, setActiveLoadCase] = useState<LoadCaseId>(() =>
     readLocal<LoadCaseId>("LOAD_TOPOLOGY_LOAD_CASE", "LC-1")
   );
@@ -212,6 +213,15 @@ function LoadTopologyLab() {
   }, [patterns, activeLoadCase]);
 
   // Actions
+  const handleRestoreNominal = () => {
+    setMask(DEFAULT_TOPLOGY_MASK);
+    logEvent(
+      "system",
+      "TOPOLOGY_RESTORED",
+      `Nominal truss topology restored (Mask #${DEFAULT_TOPLOGY_MASK} - 110111, 5/6 members active)`
+    );
+  };
+
   const handleToggleMember = (index: number) => {
     const newMask = mask ^ (1 << index);
     const wasActive = Boolean(mask & (1 << index));
@@ -329,6 +339,7 @@ function LoadTopologyLab() {
             onToggleMember={handleToggleMember}
             onSelectLoadCase={handleSelectLoadCase}
             onExecuteProbe={handleExecuteProbe}
+            onRestoreNominal={handleRestoreNominal}
             onNavigate={setCurrentView}
             isProbing={isProbing}
           />
@@ -347,6 +358,7 @@ function LoadTopologyLab() {
             onUpdateDefects={setDefects}
             onUpdateJointCompliance={setJointCompliance}
             onExecuteProbe={handleExecuteProbe}
+            onRestoreNominal={handleRestoreNominal}
             onInducePattern={handleInducePattern}
             isProbing={isProbing}
             simulationMode={simulationMode}

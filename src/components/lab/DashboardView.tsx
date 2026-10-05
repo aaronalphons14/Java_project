@@ -35,6 +35,7 @@ interface DashboardViewProps {
   onToggleMember: (index: number) => void;
   onSelectLoadCase: (id: LoadCaseId) => void;
   onExecuteProbe: () => void;
+  onRestoreNominal: () => void;
   onNavigate: (view: LabViewId) => void;
   isProbing: boolean;
 }
@@ -51,6 +52,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onToggleMember,
   onSelectLoadCase,
   onExecuteProbe,
+  onRestoreNominal,
   onNavigate,
   isProbing,
 }) => {
@@ -67,9 +69,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   return (
     <div className="space-y-6">
       {/* KPI Cards Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
         {/* Card 1: Realization Error */}
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 shadow-sm relative overflow-hidden">
+        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 shadow-sm relative overflow-hidden min-w-0">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
               Realization Error (L1)
@@ -107,7 +109,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         {/* Card 2: Search Space Pruning */}
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 shadow-sm relative overflow-hidden">
+        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 shadow-sm relative overflow-hidden min-w-0">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
               Search Space Pruned
@@ -142,7 +144,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         {/* Card 3: Context Memory Soundness */}
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 shadow-sm relative overflow-hidden">
+        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 shadow-sm relative overflow-hidden min-w-0">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
               Pattern Soundness
@@ -177,7 +179,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         {/* Card 4: Actuator & Locks State */}
-        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 shadow-sm relative overflow-hidden">
+        <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 shadow-sm relative overflow-hidden min-w-0">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
               Actuated Locks
@@ -247,6 +249,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               solveRealized={solveRealized}
               defects={defects}
               onToggleMember={onToggleMember}
+              onRestoreNominal={onRestoreNominal}
               className="my-2"
             />
           </div>

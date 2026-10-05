@@ -34,6 +34,7 @@ interface ProbeLabViewProps {
   onUpdateDefects: (defects: Defect[]) => void;
   onUpdateJointCompliance: (compliance: number[]) => void;
   onExecuteProbe: () => void;
+  onRestoreNominal: () => void;
   onInducePattern: (pattern: Pattern) => void;
   isProbing: boolean;
   simulationMode: "sim" | "virtual-esp32" | "live-hardware";
@@ -51,6 +52,7 @@ export const ProbeLabView: React.FC<ProbeLabViewProps> = ({
   onUpdateDefects,
   onUpdateJointCompliance,
   onExecuteProbe,
+  onRestoreNominal,
   onInducePattern,
   isProbing,
   simulationMode,
@@ -175,6 +177,7 @@ export const ProbeLabView: React.FC<ProbeLabViewProps> = ({
               showDeformed={showDeformed}
               amplification={amplification}
               onToggleMember={onToggleMember}
+              onRestoreNominal={onRestoreNominal}
             />
 
             {/* Load Case Quick Switcher */}

@@ -19,6 +19,7 @@ interface TrussCanvasProps {
   showDeformed?: boolean;
   amplification?: number;
   onToggleMember?: (memberIndex: number) => void;
+  onRestoreNominal?: () => void;
   interactive?: boolean;
   highlightDefects?: boolean;
   className?: string;
@@ -33,6 +34,7 @@ export const TrussCanvas: React.FC<TrussCanvasProps> = ({
   showDeformed = true,
   amplification = 40000,
   onToggleMember,
+  onRestoreNominal,
   interactive = true,
   highlightDefects = true,
   className = "",
@@ -56,26 +58,35 @@ export const TrussCanvas: React.FC<TrussCanvasProps> = ({
     [activeLoadCase]
   );
 
-  // Compute deformed node positions if available
+  const isStable = Boolean(solveRealized?.stable ?? solveNominal?.stable ?? false);
+  const activeMemberCount = useMemo(
+    () => Array.from({ length: 6 }).filter((_, i) => Boolean(mask & (1 << i))).length,
+    [mask]
+  );
+
+  // Compute deformed node positions if available (with strict visual bounds clamping)
   const deformedNodes = useMemo(() => {
     const disp = solveRealized?.displacement ?? solveNominal?.displacement;
     return NODE_POSITIONS.map(([x, y], i) => {
-      if (!showDeformed || !disp) return [toSvgX(x), toSvgY(y)] as [number, number];
-      const dx = (disp[2 * i] ?? 0) * amplification;
-      const dy = (disp[2 * i + 1] ?? 0) * amplification;
+      if (!showDeformed || !disp || !isStable) return [toSvgX(x), toSvgY(y)] as [number, number];
+      const maxVisualOffset = 0.15; // At most 15% of span offset
+      const rawDx = (disp[2 * i] ?? 0) * amplification;
+      const rawDy = (disp[2 * i + 1] ?? 0) * amplification;
+      const dx = Math.max(-maxVisualOffset, Math.min(maxVisualOffset, rawDx));
+      const dy = Math.max(-maxVisualOffset, Math.min(maxVisualOffset, rawDy));
       return [toSvgX(x + dx), toSvgY(y + dy)] as [number, number];
     });
-  }, [solveRealized, solveNominal, showDeformed, amplification]);
+  }, [solveRealized, solveNominal, showDeformed, amplification, isStable]);
 
   const undeformedNodes = useMemo(() => {
     return NODE_POSITIONS.map(([x, y]) => [toSvgX(x), toSvgY(y)] as [number, number]);
   }, []);
 
   return (
-    <div className={`relative flex flex-col items-center select-none ${className}`}>
+    <div className={`relative flex flex-col items-center select-none overflow-hidden ${className}`}>
       <svg
         viewBox={`0 0 ${width} ${height}`}
-        className="w-full h-auto max-h-[380px] drop-shadow-md overflow-visible"
+        className="w-full h-auto max-h-[380px] drop-shadow-md overflow-hidden"
         aria-label="Six-member planar truss visualization"
       >
         <defs>
@@ -343,6 +354,30 @@ export const TrussCanvas: React.FC<TrussCanvasProps> = ({
           );
         })}
       </svg>
+
+      {/* Mechanism / Unconstrained Topology Warning Overlay */}
+      {!isStable && (
+        <div className="absolute top-1/3 inset-x-4 flex items-center justify-center pointer-events-none z-10">
+          <div className="bg-slate-950/95 border border-amber-600/80 p-3 rounded-xl text-center font-mono text-xs max-w-sm shadow-2xl pointer-events-auto backdrop-blur">
+            <span className="text-amber-400 font-bold block mb-1">
+              ⚠️ UNCONSTRAINED MECHANISM ({activeMemberCount}/6 Active)
+            </span>
+            <p className="text-slate-400 text-[11px] mb-2 leading-relaxed">
+              {activeMemberCount === 0
+                ? "All member locks released. The frame has 0 load capacity."
+                : "Current member arrangement is statically unstable and cannot resist force."}
+            </p>
+            {onRestoreNominal && (
+              <button
+                onClick={onRestoreNominal}
+                className="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 active:bg-sky-700 text-white font-bold text-xs shadow-md transition-all cursor-pointer"
+              >
+                Restore Nominal Topology (#55)
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Interactive Legend / Controls */}
       <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-mono text-slate-300 mt-2 px-3 py-1.5 rounded-lg bg-slate-900/80 border border-slate-800">

@@ -67,7 +67,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               onClick={() => {
                 const nextMode: Record<SimulationMode, SimulationMode> = {
                   sim: "virtual-esp32",
-                  "virtual-esp32": "sim",
+                  "virtual-esp32": "live-hardware",
                   "live-hardware": "sim",
                 };
                 onSelectMode(nextMode[simulationMode]);
