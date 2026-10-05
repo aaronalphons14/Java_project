@@ -66,12 +66,20 @@ function elasticSolve(mask: number, loadCase: LoadCaseId, ea: number[], extraMem
     const c = dx / length, s = dy / length, k = axial / length;
     const local = [[c*c,c*s,-c*c,-c*s],[c*s,s*s,-c*s,-s*s],[-c*c,-c*s,c*c,c*s],[-c*s,-s*s,c*s,s*s]];
     const indices = [2*a, 2*a+1, 2*b, 2*b+1];
-    indices.forEach((row, ii) => indices.forEach((col, jj) => { K[row]![col] += k * (local[ii]?.[jj] ?? 0); }));
+    indices.forEach((row, ii) => indices.forEach((col, jj) => {
+      const rowValues = K[row];
+      if (rowValues) rowValues[col] = (rowValues[col] ?? 0) + k * (local[ii]?.[jj] ?? 0);
+    }));
   });
   // Translational joint springs provide a stable, explicit compliance control.
   jointCompliance.forEach((compliance, node) => {
     const spring = compliance > 0 ? 1 / compliance : 0;
-    if (spring > 0 && node < 4) { K[2*node]![2*node] += spring; K[2*node+1]![2*node+1] += spring; }
+    if (spring > 0 && node < 4) {
+      const horizontal = K[2 * node];
+      const vertical = K[2 * node + 1];
+      if (horizontal) horizontal[2 * node] = (horizontal[2 * node] ?? 0) + spring;
+      if (vertical) vertical[2 * node + 1] = (vertical[2 * node + 1] ?? 0) + spring;
+    }
   });
   const caseDef = LOAD_CASES.find(c => c.id === loadCase) ?? LOAD_CASES[0]!;
   const force = Array(8).fill(0) as number[];
