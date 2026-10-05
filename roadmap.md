@@ -1,4 +1,4 @@
-- [ ] Implement the browser-only Load Topology Lab experience and section workflows.
-- [ ] Add isolated, tested solver, pattern/pruning, benchmark, and serial/virtual-device modules.
-- [ ] Add ESP32 firmware and wiring/protocol README.
-- [ ] Verify tests, route metadata, and preview/build diagnostics.
+- [x] Implement the browser-only Load Topology Lab experience and section workflows.
+- [x] Add isolated, tested solver, pattern/pruning, benchmark, and serial/virtual-device modules.
+- [x] Add ESP32 firmware and wiring/protocol README.
+- [x] Verify tests, route metadata, and preview/build diagnostics.

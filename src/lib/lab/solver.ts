@@ -111,10 +111,18 @@ export function solveTruss(mask: number, loadCase: LoadCaseId, ea: number[] = ME
 }
 export function solveRealized(mask: number, loadCase: LoadCaseId, defects: Defect[], ea: number[] = MEMBER_DEFAULT_EA, jointCompliance: number[] = []): SolveResult {
   const actual = new Set<number>();
+  let currentMask = mask;
   for (let round = 0; round < 3; round++) {
     const stiffness = ea.slice();
+    for (const defect of defects) {
+      if (defect.enabled && (currentMask & (1 << defect.member)) && defect.loadCases.includes(loadCase)) {
+        if (defect.mustBeActive.every(m => Boolean(currentMask & (1 << m))) && defect.mustBeInactive.every(m => !Boolean(currentMask & (1 << m)))) {
+          stiffness[defect.member] = (ea[defect.member] ?? 2e6) * defect.stiffnessFraction;
+        }
+      }
+    }
     actual.forEach(member => { stiffness[member] = (ea[member] ?? 2e6) * (defects.find(d => d.member === member)?.stiffnessFraction ?? 0.35); });
-    const result = elasticSolve(mask, loadCase, stiffness, undefined, 0, jointCompliance);
+    const result = elasticSolve(currentMask, loadCase, stiffness, undefined, 0, jointCompliance);
     let changed = false;
     for (const defect of defects) {
       if (!defect.enabled || defect.member < 0 || defect.member > 5 || (mask & (1 << defect.member)) || !defect.loadCases.includes(loadCase)) continue;
@@ -122,13 +130,20 @@ export function solveRealized(mask: number, loadCase: LoadCaseId, defects: Defec
       const [a,b] = MEMBER_ENDPOINTS[defect.member] ?? [0,1];
       const dx=(NODE_POSITIONS[b]?.[0]??0)-(NODE_POSITIONS[a]?.[0]??0),dy=(NODE_POSITIONS[b]?.[1]??0)-(NODE_POSITIONS[a]?.[1]??0),length=Math.hypot(dx,dy),c=dx/length,s=dy/length;
       const extension=((result.displacement[2*b]??0)-(result.displacement[2*a]??0))*c+((result.displacement[2*b+1]??0)-(result.displacement[2*a+1]??0))*s;
-      if (extension > defect.gap && !actual.has(defect.member)) { actual.add(defect.member); changed = true; }
+      if (Math.abs(extension) > defect.gap && !actual.has(defect.member)) { actual.add(defect.member); currentMask |= (1 << defect.member); changed = true; }
     }
     if (!changed) return result;
   }
   const stiffness = ea.slice();
+  for (const defect of defects) {
+    if (defect.enabled && (currentMask & (1 << defect.member)) && defect.loadCases.includes(loadCase)) {
+      if (defect.mustBeActive.every(m => Boolean(currentMask & (1 << m))) && defect.mustBeInactive.every(m => !Boolean(currentMask & (1 << m)))) {
+        stiffness[defect.member] = (ea[defect.member] ?? 2e6) * defect.stiffnessFraction;
+      }
+    }
+  }
   actual.forEach(member => { stiffness[member] = (ea[member] ?? 2e6) * (defects.find(d => d.member === member)?.stiffnessFraction ?? 0.35); });
-  return elasticSolve(mask, loadCase, stiffness, undefined, 0, jointCompliance);
+  return elasticSolve(currentMask, loadCase, stiffness, undefined, 0, jointCompliance);
 }
 export function l1Error(a: number[], b: number[]): number { return a.reduce((sum,value,i)=>sum+Math.abs(value-(b[i]??0)),0); }
 export function measuredFingerprint(fingerprint: Vector, noise: number, rng: Rng): Vector {

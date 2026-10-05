@@ -25,8 +25,8 @@ export function recordVerification(pattern:Pattern, matchesPrediction:boolean, o
  if(member===undefined)return {...pattern,verifiedCount,violationCount:pattern.violationCount+1};
  const active=Boolean(observedMask&(1<<member));
  const refined={...pattern,verifiedCount,violationCount:pattern.violationCount+1,
-   ...(active?{mustBeActive:[...pattern.mustBeActive,member]}:{mustBeInactive:[...pattern.mustBeInactive,member]}),
-   refinements:[...pattern.refinements,`Added M${member+1} ${active?"active":"inactive"} after verification disagreement.`]};
+   ...(!active?{mustBeActive:[...pattern.mustBeActive,member]}:{mustBeInactive:[...pattern.mustBeInactive,member]}),
+   refinements:[...pattern.refinements,`Added M${member+1} ${!active?"active":"inactive"} after verification disagreement.`]};
  return refined;
 }
 export function soundnessRate(patterns:Pattern[]):number {
