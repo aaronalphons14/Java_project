@@ -46,7 +46,15 @@ export const TopBar: React.FC<TopBarProps> = ({
               <line x1="6" y1="18" x2="6" y2="6" stroke="#38bdf8" strokeWidth="1.5" />
               <line x1="18" y1="18" x2="18" y2="6" stroke="#38bdf8" strokeWidth="1.5" />
               <line x1="6" y1="18" x2="18" y2="6" stroke="#818cf8" strokeWidth="1.5" />
-              <line x1="6" y1="6" x2="18" y2="18" stroke="#06b6d4" strokeWidth="1.5" strokeDasharray="2 1.5" />
+              <line
+                x1="6"
+                y1="6"
+                x2="18"
+                y2="18"
+                stroke="#06b6d4"
+                strokeWidth="1.5"
+                strokeDasharray="2 1.5"
+              />
               <circle cx="6" cy="18" r="2" fill="#0284c7" />
               <circle cx="18" cy="18" r="2" fill="#0284c7" />
               <circle cx="6" cy="6" r="2" fill="#6366f1" />
@@ -86,8 +94,8 @@ export const TopBar: React.FC<TopBarProps> = ({
                 simulationMode === "sim"
                   ? "bg-indigo-950/80 border-indigo-700/80 text-indigo-300 hover:bg-indigo-900/80"
                   : simulationMode === "virtual-esp32"
-                  ? "bg-teal-950/80 border-teal-700/80 text-teal-300 hover:bg-teal-900/80"
-                  : "bg-emerald-950/80 border-emerald-700/80 text-emerald-300 hover:bg-emerald-900/80"
+                    ? "bg-teal-950/80 border-teal-700/80 text-teal-300 hover:bg-teal-900/80"
+                    : "bg-emerald-950/80 border-emerald-700/80 text-emerald-300 hover:bg-emerald-900/80"
               }`}
               title="Click to toggle simulation / virtual ESP32 mode"
             >
@@ -106,9 +114,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             <span>
               Mask #{mask} <span className="text-slate-500">({binaryString})</span>
             </span>
-            <span className="text-[10px] text-sky-400 font-semibold">
-              {activeMemberCount}/6 M
-            </span>
+            <span className="text-[10px] text-sky-400 font-semibold">{activeMemberCount}/6 M</span>
           </div>
 
           {/* Active Load Case */}
@@ -122,8 +128,8 @@ export const TopBar: React.FC<TopBarProps> = ({
               safetyState === "normal"
                 ? "bg-emerald-950/60 border-emerald-800/80 text-emerald-400"
                 : safetyState === "warning"
-                ? "bg-amber-950/60 border-amber-800/80 text-amber-400"
-                : "bg-rose-950 border-rose-600 text-rose-300 animate-pulse"
+                  ? "bg-amber-950/60 border-amber-800/80 text-amber-400"
+                  : "bg-rose-950 border-rose-600 text-rose-300 animate-pulse"
             }`}
           >
             {safetyState === "normal" && <ShieldCheck className="w-3.5 h-3.5" />}

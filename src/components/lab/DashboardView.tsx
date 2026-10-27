@@ -63,7 +63,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   const currentSoundness = soundnessRate(patterns);
   const activeMembers = Array.from({ length: 6 }, (_, i) => i).filter((i) =>
-    Boolean(mask & (1 << i))
+    Boolean(mask & (1 << i)),
   );
 
   return (
@@ -117,9 +117,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <Layers className="w-4 h-4 text-sky-400" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono text-sky-400">
-              {prunedCount} / 64
-            </span>
+            <span className="text-2xl font-bold font-mono text-sky-400">{prunedCount} / 64</span>
             <span className="text-xs text-sky-500 font-mono">
               ({((prunedCount / 64) * 100).toFixed(0)}%)
             </span>
@@ -364,9 +362,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                         [{lc.force[0]}, {lc.force[1]}] N
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-400 mt-1 line-clamp-1">
-                      {lc.description}
-                    </p>
+                    <p className="text-[11px] text-slate-400 mt-1 line-clamp-1">{lc.description}</p>
                   </button>
                 );
               })}
@@ -442,8 +438,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                           evt.source === "hardware"
                             ? "bg-emerald-950 text-emerald-400 border border-emerald-800"
                             : evt.source === "sim"
-                            ? "bg-indigo-950 text-indigo-400 border border-indigo-800"
-                            : "bg-amber-950 text-amber-400 border border-amber-800"
+                              ? "bg-indigo-950 text-indigo-400 border border-indigo-800"
+                              : "bg-amber-950 text-amber-400 border border-amber-800"
                         }`}
                       >
                         {evt.source}

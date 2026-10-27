@@ -1,4 +1,50 @@
-import {describe,expect,it} from "vitest";
-import {matchesPattern,prunesMask,recordVerification,soundnessRate,type Pattern} from "./patterns";
-const sample:Pattern={id:"test",mustBeActive:[0],mustBeInactive:[5],loadCase:"LC-1",boundaryCondition:"fixed",structuralState:"ambient",responseSignature:[],verdict:"unsafe",timestamp:"",source:"sim",supportCount:1,violationCount:0,verifiedCount:0,refinements:[]};
-describe("context patterns",()=>{it("requires every active and inactive condition",()=>{expect(matchesPattern(1,sample)).toBe(true);expect(matchesPattern(33,sample)).toBe(false);expect(matchesPattern(32,sample)).toBe(false);});it("prunes only the matching load case and pattern",()=>{expect(prunesMask(1,[sample],"LC-1")).toBe(true);expect(prunesMask(1,[sample],"LC-4")).toBe(false);expect(prunesMask(33,[sample],"LC-1")).toBe(false);});it("refines on verification disagreement",()=>{const updated=recordVerification({...sample,mustBeActive:[]},false,1);expect(matchesPattern(1,updated)).toBe(false);expect(updated.refinements).toHaveLength(1);expect(updated.violationCount).toBe(1);});it("calculates verified prune soundness",()=>{expect(soundnessRate([{...sample,verifiedCount:4,violationCount:1}])).toBe(.75);});});
+import { describe, expect, it } from "vitest";
+import {
+  matchesPattern,
+  prunesMask,
+  recordVerification,
+  soundnessRate,
+  type Pattern,
+} from "./patterns";
+const sample: Pattern = {
+  id: "test",
+  mustBeActive: [0],
+  mustBeInactive: [5],
+  loadCase: "LC-1",
+  boundaryCondition: "fixed",
+  structuralState: "ambient",
+  responseSignature: [],
+  verdict: "unsafe",
+  timestamp: "",
+  source: "sim",
+  supportCount: 1,
+  violationCount: 0,
+  verifiedCount: 0,
+  refinements: [],
+};
+describe("context patterns", () => {
+  it("requires every active and inactive condition", () => {
+    expect(matchesPattern(1, sample)).toBe(true);
+    expect(matchesPattern(33, sample)).toBe(false);
+    expect(matchesPattern(32, sample)).toBe(false);
+  });
+  it("prunes only the matching load case and pattern", () => {
+    expect(prunesMask(1, [sample], "LC-1")).toBe(true);
+    expect(prunesMask(1, [sample], "LC-4")).toBe(false);
+    expect(prunesMask(33, [sample], "LC-1")).toBe(false);
+  });
+  it("allows an LC-1 unsafe topology under LC-4", () => {
+    const lc1Unsafe = { ...sample, verdict: "unsafe" as const, loadCase: "LC-1" as const };
+    expect(prunesMask(1, [lc1Unsafe], "LC-1")).toBe(true);
+    expect(prunesMask(1, [lc1Unsafe], "LC-4")).toBe(false);
+  });
+  it("refines on verification disagreement", () => {
+    const updated = recordVerification({ ...sample, mustBeActive: [] }, false, 1);
+    expect(matchesPattern(1, updated)).toBe(false);
+    expect(updated.refinements).toHaveLength(1);
+    expect(updated.violationCount).toBe(1);
+  });
+  it("calculates verified prune soundness", () => {
+    expect(soundnessRate([{ ...sample, verifiedCount: 4, violationCount: 1 }])).toBe(0.75);
+  });
+});

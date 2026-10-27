@@ -100,7 +100,7 @@ export const ProbeLabView: React.FC<ProbeLabViewProps> = ({
       activeLoadCase,
       solveRealized.fingerprint,
       error > 0.1 ? "unsafe" : "acceptable",
-      source
+      source,
     );
     onInducePattern(pattern);
   };
@@ -115,7 +115,8 @@ export const ProbeLabView: React.FC<ProbeLabViewProps> = ({
             PROBE & SENSING LABORATORY
           </h2>
           <p className="text-xs text-slate-400">
-            Apply controlled quasi-static test forces, inspect member reaction fingerprints, and calibrate gap defects.
+            Apply controlled quasi-static test forces, inspect member reaction fingerprints, and
+            calibrate gap defects.
           </p>
         </div>
 
@@ -131,7 +132,9 @@ export const ProbeLabView: React.FC<ProbeLabViewProps> = ({
               onChange={(e) => setAmplification(Number(e.target.value))}
               className="w-24 accent-sky-500 cursor-pointer"
             />
-            <span className="text-[10px] w-10 text-right">×{(amplification / 1000).toFixed(0)}k</span>
+            <span className="text-[10px] w-10 text-right">
+              ×{(amplification / 1000).toFixed(0)}k
+            </span>
           </div>
 
           <button
@@ -228,10 +231,10 @@ export const ProbeLabView: React.FC<ProbeLabViewProps> = ({
                       i === 0
                         ? "Pinned (fixed u, v)"
                         : i === 1
-                        ? "Roller (fixed v, free u)"
-                        : i === 2
-                        ? `Loaded (${currentCase.id})`
-                        : "Free Joint";
+                          ? "Roller (fixed v, free u)"
+                          : i === 2
+                            ? `Loaded (${currentCase.id})`
+                            : "Free Joint";
 
                     return (
                       <tr key={name}>
@@ -322,12 +325,8 @@ export const ProbeLabView: React.FC<ProbeLabViewProps> = ({
                     return (
                       <tr key={name}>
                         <td className="py-1 font-bold text-slate-300">{name}</td>
-                        <td className="py-1 text-right text-slate-400">
-                          {nomLoad.toFixed(1)} N
-                        </td>
-                        <td className="py-1 text-right text-slate-200">
-                          {realLoad.toFixed(1)} N
-                        </td>
+                        <td className="py-1 text-right text-slate-400">{nomLoad.toFixed(1)} N</td>
+                        <td className="py-1 text-right text-slate-200">{realLoad.toFixed(1)} N</td>
                         <td className="py-1 text-right text-slate-400">
                           {(realLoad - nomLoad).toFixed(1)} N
                         </td>

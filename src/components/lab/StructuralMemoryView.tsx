@@ -99,7 +99,8 @@ export const StructuralMemoryView: React.FC<StructuralMemoryViewProps> = ({
             STRUCTURAL MEMORY & CONTEXTUAL PATTERNS
           </h2>
           <p className="text-xs text-slate-400">
-            Compact relationship rules learned from sensor mismatches. Prunes invalid topologies across load cases.
+            Compact relationship rules learned from sensor mismatches. Prunes invalid topologies
+            across load cases.
           </p>
         </div>
 
@@ -161,13 +162,9 @@ export const StructuralMemoryView: React.FC<StructuralMemoryViewProps> = ({
                       className={`hover:bg-slate-800/40 cursor-pointer transition-colors ${
                         isSelected ? "bg-slate-800/60" : ""
                       }`}
-                      onClick={() =>
-                        setSelectedPatternId(isSelected ? null : p.id)
-                      }
+                      onClick={() => setSelectedPatternId(isSelected ? null : p.id)}
                     >
-                      <td className="py-2 px-2 font-bold text-slate-300">
-                        {p.id.slice(0, 14)}...
-                      </td>
+                      <td className="py-2 px-2 font-bold text-slate-300">{p.id.slice(0, 14)}...</td>
                       <td className="py-2 px-2">
                         <span
                           className={`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase ${
@@ -211,9 +208,7 @@ export const StructuralMemoryView: React.FC<StructuralMemoryViewProps> = ({
                           <span className="text-slate-600">—</span>
                         )}
                       </td>
-                      <td className="py-2 px-2 text-amber-300 font-semibold">
-                        {p.loadCase}
-                      </td>
+                      <td className="py-2 px-2 text-amber-300 font-semibold">{p.loadCase}</td>
                       <td className="py-2 px-2">
                         <span
                           className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${
@@ -315,7 +310,8 @@ export const StructuralMemoryView: React.FC<StructuralMemoryViewProps> = ({
               {patterns.length === 0 && (
                 <tr>
                   <td colSpan={9} className="text-center py-6 text-slate-500 font-mono italic">
-                    No structural patterns recorded yet. Execute a probe resulting in mismatch or add a rule below.
+                    No structural patterns recorded yet. Execute a probe resulting in mismatch or
+                    add a rule below.
                   </td>
                 </tr>
               )}
@@ -330,14 +326,13 @@ export const StructuralMemoryView: React.FC<StructuralMemoryViewProps> = ({
           Manual Pattern Definition (Inductive Rule Injection)
         </h3>
         <p className="text-xs text-slate-400 mb-3">
-          Synthesize a relationship pattern specifying conditions that cause an unsafe or acceptable verdict under a load case.
+          Synthesize a relationship pattern specifying conditions that cause an unsafe or acceptable
+          verdict under a load case.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs font-mono">
           <div>
-            <label className="text-[10px] text-slate-500 block mb-1">
-              Required Active Members
-            </label>
+            <label className="text-[10px] text-slate-500 block mb-1">Required Active Members</label>
             <div className="grid grid-cols-3 gap-1">
               {MEMBER_NAMES.map((name, i) => {
                 const selected = newRequiredActive.includes(i);
@@ -346,7 +341,7 @@ export const StructuralMemoryView: React.FC<StructuralMemoryViewProps> = ({
                     key={name}
                     onClick={() =>
                       setNewRequiredActive((prev) =>
-                        selected ? prev.filter((x) => x !== i) : [...prev, i]
+                        selected ? prev.filter((x) => x !== i) : [...prev, i],
                       )
                     }
                     className={`py-1 rounded text-center text-[10px] font-bold border cursor-pointer ${
@@ -374,7 +369,7 @@ export const StructuralMemoryView: React.FC<StructuralMemoryViewProps> = ({
                     key={name}
                     onClick={() =>
                       setNewRequiredInactive((prev) =>
-                        selected ? prev.filter((x) => x !== i) : [...prev, i]
+                        selected ? prev.filter((x) => x !== i) : [...prev, i],
                       )
                     }
                     className={`py-1 rounded text-center text-[10px] font-bold border cursor-pointer ${
@@ -391,9 +386,7 @@ export const StructuralMemoryView: React.FC<StructuralMemoryViewProps> = ({
           </div>
 
           <div>
-            <label className="text-[10px] text-slate-500 block mb-1">
-              Load Case Context
-            </label>
+            <label className="text-[10px] text-slate-500 block mb-1">Load Case Context</label>
             <select
               value={newLoadCase}
               onChange={(e) => setNewLoadCase(e.target.value as LoadCaseId)}

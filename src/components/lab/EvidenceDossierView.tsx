@@ -10,19 +10,15 @@ import {
   Layers,
   Sparkles,
 } from "lucide-react";
-import {
-  CLAIM_ELEMENTS,
-  SEED_INDEPENDENT,
-  SEED_DEPENDENT,
-} from "@/lib/lab/evidence";
+import { CLAIM_ELEMENTS, SEED_INDEPENDENT, SEED_DEPENDENT } from "@/lib/lab/evidence";
 import { readLocal, writeLocal, downloadFile } from "@/lib/lab/storage";
 
 export const EvidenceDossierView: React.FC = () => {
   const [independentClaim, setIndependentClaim] = useState(() =>
-    readLocal("LOAD_TOPOLOGY_SEED_INDEPENDENT", SEED_INDEPENDENT)
+    readLocal("LOAD_TOPOLOGY_SEED_INDEPENDENT", SEED_INDEPENDENT),
   );
   const [dependentClaims, setDependentClaims] = useState(() =>
-    readLocal("LOAD_TOPOLOGY_SEED_DEPENDENT", SEED_DEPENDENT)
+    readLocal("LOAD_TOPOLOGY_SEED_DEPENDENT", SEED_DEPENDENT),
   );
 
   const [checklist, setChecklist] = useState<Record<string, boolean>>({
@@ -60,7 +56,7 @@ ${dependentClaims}
 | Claim Element | Verification State | Architecture Module |
 |---|---|---|
 ${CLAIM_ELEMENTS.map(
-  (el) => `| ${el} | Supported & Verified | \`src/lib/lab/\` & \`firmware/\` |`
+  (el) => `| ${el} | Supported & Verified | \`src/lib/lab/\` & \`firmware/\` |`,
 ).join("\n")}
 
 ## 4. Embodiment Ledger
@@ -71,7 +67,7 @@ ${CLAIM_ELEMENTS.map(
     downloadFile(
       `patent-evidence-dossier-${new Date().toISOString().slice(0, 10)}.md`,
       markdown,
-      "text/markdown"
+      "text/markdown",
     );
   };
 
@@ -85,7 +81,8 @@ ${CLAIM_ELEMENTS.map(
             PATENT EVIDENCE DOSSIER & CLAIMS MATRIX
           </h2>
           <p className="text-xs text-slate-400">
-            Formulation of patentable claim elements, editable claim drafts, and embodiment proof mappings.
+            Formulation of patentable claim elements, editable claim drafts, and embodiment proof
+            mappings.
           </p>
         </div>
 
@@ -220,7 +217,8 @@ ${CLAIM_ELEMENTS.map(
                 Embodiment 1: Planar 6-Member Instrumented Truss
               </span>
               <p className="text-[11px] text-slate-400 mt-1">
-                J1 pinned support, J2 roller, J3 load actuator. 6× HX711 load sensors reading axial member forces, 6× PCA9685 servos for member locking pins, 115200 baud serial.
+                J1 pinned support, J2 roller, J3 load actuator. 6× HX711 load sensors reading axial
+                member forces, 6× PCA9685 servos for member locking pins, 115200 baud serial.
               </p>
             </div>
             <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
@@ -228,7 +226,8 @@ ${CLAIM_ELEMENTS.map(
                 Embodiment 2: In-Silico Digital Twin & Virtual Emulator
               </span>
               <p className="text-[11px] text-slate-400 mt-1">
-                Pure browser-safe elastic stiffness matrix solver (Ku = f) with simulated gap closures, slack joints, and synthetic noise generation.
+                Pure browser-safe elastic stiffness matrix solver (Ku = f) with simulated gap
+                closures, slack joints, and synthetic noise generation.
               </p>
             </div>
             <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
@@ -236,7 +235,8 @@ ${CLAIM_ELEMENTS.map(
                 Embodiment 3: Metamaterial Continuous Joints (Future)
               </span>
               <p className="text-[11px] text-slate-400 mt-1">
-                Non-reciprocal mechanical metamaterials, compliant mechanisms, and continuous stiffness-tuning lattice nodes.
+                Non-reciprocal mechanical metamaterials, compliant mechanisms, and continuous
+                stiffness-tuning lattice nodes.
               </p>
             </div>
           </div>
@@ -250,10 +250,22 @@ ${CLAIM_ELEMENTS.map(
           </h3>
           <div className="space-y-2">
             {[
-              { id: "check1", text: "Physical lock actuation distinguished from purely computational state." },
-              { id: "check2", text: "Hypothesis discrimination probe selection algorithm reproducible." },
-              { id: "check3", text: "Fail-safe watchdog and hardware safe-hold interlock verified." },
-              { id: "check4", text: "Context-aware relationship pattern memory tested against counterexamples." },
+              {
+                id: "check1",
+                text: "Physical lock actuation distinguished from purely computational state.",
+              },
+              {
+                id: "check2",
+                text: "Hypothesis discrimination probe selection algorithm reproducible.",
+              },
+              {
+                id: "check3",
+                text: "Fail-safe watchdog and hardware safe-hold interlock verified.",
+              },
+              {
+                id: "check4",
+                text: "Context-aware relationship pattern memory tested against counterexamples.",
+              },
               { id: "check5", text: "Tamper-evident cryptographic SHA-256 event trail preserved." },
             ].map((item) => (
               <label

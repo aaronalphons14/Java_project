@@ -1,6 +1,47 @@
-export function readLocal<T>(key:string,fallback:T):T{if(typeof window==="undefined")return fallback;try{const value=window.localStorage.getItem(key);return value===null?fallback:JSON.parse(value) as T;}catch{return fallback;}}
-export function writeLocal<T>(key:string,value:T):void{if(typeof window!=="undefined"){try{window.localStorage.setItem(key,JSON.stringify(value));}catch{/* Private-browsing storage is optional. */}}}
-export type LabEvent={id:string;timestamp:string;source:"sim"|"hardware"|"system";type:string;message:string;data?:unknown};
-export async function sha256(value:string):Promise<string>{const bytes=new TextEncoder().encode(value);const digest=await crypto.subtle.digest("SHA-256",bytes);return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,"0")).join("");}
-export async function createLogExport(events:LabEvent[]){const exportedAt=new Date().toISOString(),hash=await sha256(JSON.stringify(events));return {format:"load-topology-lab-event-log-v1",exportedAt,hash,events:[...events]};}
-export function downloadFile(filename:string,content:string,mime="application/json"){const blob=new Blob([content],{type:mime});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url);}
+export function readLocal<T>(key: string, fallback: T): T {
+  if (typeof window === "undefined") return fallback;
+  try {
+    const value = window.localStorage.getItem(key);
+    return value === null ? fallback : (JSON.parse(value) as T);
+  } catch {
+    return fallback;
+  }
+}
+export function writeLocal<T>(key: string, value: T): void {
+  if (typeof window !== "undefined") {
+    try {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    } catch {
+      /* Private-browsing storage is optional. */
+    }
+  }
+}
+export type LabEvent = {
+  id: string;
+  timestamp: string;
+  source: "sim" | "hardware" | "system";
+  type: string;
+  message: string;
+  data?: unknown;
+};
+export async function sha256(value: string): Promise<string> {
+  const bytes = new TextEncoder().encode(value);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+export async function createLogExport(events: LabEvent[]) {
+  const exportedAt = new Date().toISOString(),
+    hash = await sha256(JSON.stringify(events));
+  return { format: "load-topology-lab-event-log-v1", exportedAt, hash, events: [...events] };
+}
+export function downloadFile(filename: string, content: string, mime = "application/json") {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}

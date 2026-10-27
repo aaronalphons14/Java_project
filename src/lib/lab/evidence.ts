@@ -1,4 +1,27 @@
-export const CLAIM_ELEMENTS=["Commanded topology actuation","Physical lock actuation","Probe under load","Realized member fingerprint","Realization error vs commanded model","Contextual pattern memory","Required-active members","Required-inactive members","Pruning of physical configurations","Probe selection by hypothesis discrimination","Pre-failure rejection"] as const;
-export type Reference={id:string;number:string;title:string;source:string;date:string;url:string;notes:string;elements:boolean[]};
-export const SEED_INDEPENDENT="A reconfigurable structure comprising lockable members, load sensors, a probe actuator and a controller configured to: command a topology and physically actuate member locks; apply a probe and measure member loads; compute a realized structural fingerprint and a topology realization error versus a model of the commanded topology; upon mismatch, store a relationship pattern comprising required-active and required-inactive member conditions and load-case context; and restrict later physical configurations matching the pattern and actuate the locks accordingly.";
-export const SEED_DEPENDENT="1. The system of claim 1, wherein the controller selects a probe for hypothesis discrimination by maximizing predicted fingerprint separation between remaining structural hypotheses.\n2. The system of claim 1, wherein the controller verifies configurations excluded by a relationship pattern and refines that pattern upon disagreement.\n3. The system of claim 1, wherein an unsafe verdict is specific to a load case.\n4. The system of claim 1, wherein a predicted unsafe topology is rejected before a qualification load is applied.\n\nFuture embodiments only: metamaterial joints; non-reciprocal joints.";
+export const CLAIM_ELEMENTS = [
+  "Commanded topology actuation",
+  "Physical lock actuation",
+  "Probe under load",
+  "Realized member fingerprint",
+  "Realization error vs commanded model",
+  "Contextual pattern memory",
+  "Required-active members",
+  "Required-inactive members",
+  "Pruning of physical configurations",
+  "Probe selection by hypothesis discrimination",
+  "Pre-failure rejection",
+] as const;
+export type Reference = {
+  id: string;
+  number: string;
+  title: string;
+  source: string;
+  date: string;
+  url: string;
+  notes: string;
+  elements: boolean[];
+};
+export const SEED_INDEPENDENT =
+  "A reconfigurable structure comprising lockable members, load sensors, a probe actuator and a controller configured to: command a topology and physically actuate member locks; apply a probe and measure member loads; compute a realized structural fingerprint and a topology realization error versus a model of the commanded topology; upon mismatch, store a relationship pattern comprising required-active and required-inactive member conditions and load-case context; and restrict later physical configurations matching the pattern and actuate the locks accordingly.";
+export const SEED_DEPENDENT =
+  "1. The system of claim 1, wherein the controller selects a probe for hypothesis discrimination by maximizing predicted fingerprint separation between remaining structural hypotheses.\n2. The system of claim 1, wherein the controller verifies configurations excluded by a relationship pattern and refines that pattern upon disagreement.\n3. The system of claim 1, wherein an unsafe verdict is specific to a load case.\n4. The system of claim 1, wherein a predicted unsafe topology is rejected before a qualification load is applied.\n\nFuture embodiments only: metamaterial joints; non-reciprocal joints.";

@@ -65,9 +65,7 @@ export const HardwareView: React.FC<HardwareViewProps> = ({
     telemetryRate: 10.1,
   });
 
-  const [virtualEspRunning, setVirtualEspRunning] = useState(
-    simulationMode === "virtual-esp32"
-  );
+  const [virtualEspRunning, setVirtualEspRunning] = useState(simulationMode === "virtual-esp32");
   const terminalEndRef = useRef<HTMLDivElement>(null);
   const seqRef = useRef(100);
 
@@ -78,9 +76,9 @@ export const HardwareView: React.FC<HardwareViewProps> = ({
       seqRef.current = (seqRef.current + 1) % 65536;
       const t = Date.now();
       const loads = MEMBER_NAMES.map((_, i) =>
-        Boolean(mask & (1 << i)) ? +(Math.random() * 40 + 10).toFixed(1) : 0
+        mask & (1 << i) ? +(Math.random() * 40 + 10).toFixed(1) : 0,
       );
-      const locks = MEMBER_NAMES.map((_, i) => (Boolean(mask & (1 << i)) ? 1 : 0));
+      const locks = MEMBER_NAMES.map((_, i) => (mask & (1 << i) ? 1 : 0));
 
       const telemetry: DeviceMessage = {
         type: "telemetry",
@@ -170,7 +168,8 @@ export const HardwareView: React.FC<HardwareViewProps> = ({
             ESP32 HARDWARE & SERIAL COMMUNICATIONS PIPELINE
           </h2>
           <p className="text-xs text-slate-400">
-            Bidirectional newline JSON Line stream at 115200 baud. Connect to physical ESP32 or activate the virtual emulator.
+            Bidirectional newline JSON Line stream at 115200 baud. Connect to physical ESP32 or
+            activate the virtual emulator.
           </p>
         </div>
 
@@ -293,9 +292,7 @@ export const HardwareView: React.FC<HardwareViewProps> = ({
                   </span>
                   <span
                     className={
-                      log.dir === "tx"
-                        ? "text-sky-300 break-all"
-                        : "text-teal-200 break-all"
+                      log.dir === "tx" ? "text-sky-300 break-all" : "text-teal-200 break-all"
                     }
                   >
                     {log.text}
@@ -334,9 +331,7 @@ export const HardwareView: React.FC<HardwareViewProps> = ({
                 onClick={() =>
                   sendCommand({
                     cmd: "set_topology",
-                    active: Array.from({ length: 6 }, (_, i) =>
-                      Boolean(mask & (1 << i)) ? 1 : 0
-                    ),
+                    active: Array.from({ length: 6 }, (_, i) => (mask & (1 << i) ? 1 : 0)),
                   })
                 }
                 className="p-2 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-indigo-400 font-semibold cursor-pointer"

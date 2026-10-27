@@ -17,16 +17,12 @@ import {
   solveTruss,
   solveRealized,
   l1Error,
-  DEFAULT_TOPLOGY_MASK,
+  DEFAULT_TOPOLOGY_MASK,
   LOAD_CASES,
   type LoadCaseId,
   type Defect,
 } from "@/lib/lab/solver";
-import {
-  matchesPattern,
-  enumerateMasks,
-  type Pattern,
-} from "@/lib/lab/patterns";
+import { matchesPattern, enumerateMasks, type Pattern } from "@/lib/lab/patterns";
 import { readLocal, writeLocal, type LabEvent } from "@/lib/lab/storage";
 
 export const Route = createFileRoute("/")({
@@ -105,11 +101,11 @@ function LoadTopologyLab() {
 
   // Topology State
   const [mask, setMask] = useState<number>(() => {
-    const saved = readLocal<number>("LOAD_TOPOLOGY_MASK", DEFAULT_TOPLOGY_MASK);
-    return saved > 0 && saved < 64 ? saved : DEFAULT_TOPLOGY_MASK;
+    const saved = readLocal<number>("LOAD_TOPOLOGY_MASK", DEFAULT_TOPOLOGY_MASK);
+    return saved > 0 && saved < 64 ? saved : DEFAULT_TOPOLOGY_MASK;
   });
   const [activeLoadCase, setActiveLoadCase] = useState<LoadCaseId>(() =>
-    readLocal<LoadCaseId>("LOAD_TOPOLOGY_LOAD_CASE", "LC-1")
+    readLocal<LoadCaseId>("LOAD_TOPOLOGY_LOAD_CASE", "LC-1"),
   );
 
   // Safety & Operating Mode
@@ -118,13 +114,13 @@ function LoadTopologyLab() {
 
   // Engineering Data State
   const [defects, setDefects] = useState<Defect[]>(() =>
-    readLocal<Defect[]>("LOAD_TOPOLOGY_DEFECTS", DEFAULT_DEFECTS)
+    readLocal<Defect[]>("LOAD_TOPOLOGY_DEFECTS", DEFAULT_DEFECTS),
   );
   const [patterns, setPatterns] = useState<Pattern[]>(() =>
-    readLocal<Pattern[]>("LOAD_TOPOLOGY_PATTERNS", DEFAULT_PATTERNS)
+    readLocal<Pattern[]>("LOAD_TOPOLOGY_PATTERNS", DEFAULT_PATTERNS),
   );
   const [events, setEvents] = useState<LabEvent[]>(() =>
-    readLocal<LabEvent[]>("LOAD_TOPOLOGY_EVENTS", INITIAL_EVENTS)
+    readLocal<LabEvent[]>("LOAD_TOPOLOGY_EVENTS", INITIAL_EVENTS),
   );
   const [jointCompliance, setJointCompliance] = useState<number[]>([0, 0, 0, 0]);
   const [isProbing, setIsProbing] = useState<boolean>(false);
@@ -163,7 +159,7 @@ function LoadTopologyLab() {
       };
       setEvents((prev) => [newEvt, ...prev.slice(0, 199)]);
     },
-    []
+    [],
   );
 
   // Solvers: Nominal & Realized
@@ -204,21 +200,18 @@ function LoadTopologyLab() {
     const all = enumerateMasks();
     return all.filter((m) =>
       patterns.some(
-        (p) =>
-          p.verdict === "unsafe" &&
-          p.loadCase === activeLoadCase &&
-          matchesPattern(m, p)
-      )
+        (p) => p.verdict === "unsafe" && p.loadCase === activeLoadCase && matchesPattern(m, p),
+      ),
     ).length;
   }, [patterns, activeLoadCase]);
 
   // Actions
   const handleRestoreNominal = () => {
-    setMask(DEFAULT_TOPLOGY_MASK);
+    setMask(DEFAULT_TOPOLOGY_MASK);
     logEvent(
       "system",
       "TOPOLOGY_RESTORED",
-      `Nominal truss topology restored (Mask #${DEFAULT_TOPLOGY_MASK} - 110111, 5/6 members active)`
+      `Nominal truss topology restored (Mask #${DEFAULT_TOPOLOGY_MASK} - 110111, 5/6 members active)`,
     );
   };
 
@@ -230,18 +223,15 @@ function LoadTopologyLab() {
       simulationMode === "live-hardware" ? "hardware" : "sim",
       "TOPOLOGY_ACTUATED",
       `Member M${index + 1} ${wasActive ? "released" : "locked"} (Commanded Mask: #${newMask})`,
-      { previousMask: mask, newMask, member: index, active: !wasActive }
+      { previousMask: mask, newMask, member: index, active: !wasActive },
     );
   };
 
   const handleSelectLoadCase = (lc: LoadCaseId) => {
     setActiveLoadCase(lc);
-    logEvent(
-      "system",
-      "LOAD_CASE_CHANGED",
-      `Active qualification load case switched to ${lc}`,
-      { loadCase: lc }
-    );
+    logEvent("system", "LOAD_CASE_CHANGED", `Active qualification load case switched to ${lc}`, {
+      loadCase: lc,
+    });
   };
 
   const handleExecuteProbe = () => {
@@ -254,7 +244,7 @@ function LoadTopologyLab() {
       simulationMode === "live-hardware" ? "hardware" : "sim",
       "PROBE_INITIATED",
       `Applying test load on joint J3 under ${activeLoadCase}`,
-      { mask, loadCase: activeLoadCase }
+      { mask, loadCase: activeLoadCase },
     );
 
     setTimeout(() => {
@@ -267,7 +257,7 @@ function LoadTopologyLab() {
           error: currentL1Error,
           nominalFp: solveNominal.fingerprint,
           realizedFp: solveRealizedResult.fingerprint,
-        }
+        },
       );
     }, 600);
   };
@@ -278,7 +268,7 @@ function LoadTopologyLab() {
       "system",
       "SAFE_HOLD_TRIGGERED",
       "EMERGENCY STOP (E-STOP) actuated! Actuators held in safe state.",
-      { mask, loadCase: activeLoadCase }
+      { mask, loadCase: activeLoadCase },
     );
   };
 
@@ -287,7 +277,7 @@ function LoadTopologyLab() {
     logEvent(
       "system",
       "SAFE_HOLD_CLEARED",
-      "Safety interlock reset. Normal workbench operations resumed."
+      "Safety interlock reset. Normal workbench operations resumed.",
     );
   };
 
@@ -297,7 +287,7 @@ function LoadTopologyLab() {
       pattern.source,
       "PATTERN_INDUCED",
       `New relationship pattern ${pattern.id} synthesized (${pattern.verdict} under ${pattern.loadCase}).`,
-      pattern
+      pattern,
     );
   };
 
@@ -366,11 +356,7 @@ function LoadTopologyLab() {
         )}
 
         {currentView === "memory" && (
-          <StructuralMemoryView
-            patterns={patterns}
-            onUpdatePatterns={setPatterns}
-            mask={mask}
-          />
+          <StructuralMemoryView patterns={patterns} onUpdatePatterns={setPatterns} mask={mask} />
         )}
 
         {currentView === "searchspace" && (
@@ -384,7 +370,7 @@ function LoadTopologyLab() {
                 "system",
                 "TOPOLOGY_SELECTED",
                 `Commanded topology mask switched to #${newMask} from search space`,
-                { mask: newMask }
+                { mask: newMask },
               );
             }}
             onSelectLoadCase={handleSelectLoadCase}

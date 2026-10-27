@@ -9,10 +9,11 @@
 // USB CDC/serial: newline-delimited UTF-8 JSON at 115200 baud.
 static constexpr uint8_t MEMBER_COUNT = 6;
 static constexpr uint8_t HX_DOUT[MEMBER_COUNT] = {4, 16, 17, 18, 19, 23};
-static constexpr uint8_t HX_SCK[MEMBER_COUNT]  = {5, 21, 22, 25, 26, 27};
+static constexpr uint8_t HX_SCK[MEMBER_COUNT]  = {13, 14, 32, 25, 26, 27};
 static constexpr uint8_t LOCK_CHANNEL[MEMBER_COUNT] = {0, 1, 2, 3, 4, 5};
 static constexpr uint8_t PROBE_SERVO_CHANNEL = 6;
-static constexpr uint8_t ESTOP_PIN = 33;  // Wire as normally-closed, active-low circuit.
+static constexpr uint8_t ESTOP_PIN = 33;
+static constexpr int ESTOP_TRIPPED = HIGH;
 static constexpr uint32_t HEARTBEAT_TIMEOUT_MS = 3000;
 static constexpr uint32_t TELEMETRY_PERIOD_MS = 100;
 static constexpr uint32_t OLED_PERIOD_MS = 250;
@@ -28,6 +29,7 @@ float calibration[MEMBER_COUNT] = {2280,2280,2280,2280,2280,2280};
 float loads[MEMBER_COUNT] = {};
 int locks[MEMBER_COUNT] = {};
 uint32_t seq = 0, lastHeartbeat = 0, lastTelemetry = 0, lastOled = 0;
+uint32_t probeEndTime = 0;
 bool safeHold = false, probeActive = false;
 String inputLine;
 
@@ -72,8 +74,9 @@ void handleCommand(JsonDocument& doc) {
     reply(id,true); return;
   }
   if (strcmp(cmd, "probe") == 0) {
-    if(safeHold||digitalRead(ESTOP_PIN)==LOW){enterSafeHold("ESTOP");reply(id,false,"SAFE_HOLD");return;}
-    lastHeartbeat=millis();int duration=constrain((int)(doc["dur_ms"]|200),1,2000);setProbe(true);delay(duration);setProbe(false);reply(id,true);return;
+    if(safeHold||digitalRead(ESTOP_PIN)==ESTOP_TRIPPED){enterSafeHold("ESTOP");reply(id,false,"SAFE_HOLD");return;}
+    lastHeartbeat=millis();int duration=constrain((int)(doc["dur_ms"]|200),1,2000);
+    probeEndTime=millis()+duration;setProbe(true);reply(id,true);return;
   }
   if (strcmp(cmd, "set_topology") == 0) {
     if(safeHold){reply(id,false,"SAFE_HOLD");return;} JsonArray values=doc["active"].as<JsonArray>();
@@ -119,7 +122,8 @@ void loop() {
     else if(c!='\r'){if(inputLine.length()<1024)inputLine+=c;else{inputLine="";event("LINE_TOO_LONG");}}
   }
   const uint32_t now=millis();
-  if(!safeHold&&digitalRead(ESTOP_PIN)==LOW)enterSafeHold("ESTOP");
+  if(!safeHold&&digitalRead(ESTOP_PIN)==ESTOP_TRIPPED)enterSafeHold("ESTOP");
+  if(probeActive&&(int32_t)(now-probeEndTime)>=0)setProbe(false);
   if(!safeHold&&now-lastHeartbeat>HEARTBEAT_TIMEOUT_MS)enterSafeHold("HEARTBEAT_TIMEOUT");
   if(now-lastTelemetry>=TELEMETRY_PERIOD_MS){lastTelemetry=now;updateLoads();sendTelemetry();}
   if(now-lastOled>=OLED_PERIOD_MS){lastOled=now;drawStatus();}

@@ -88,7 +88,8 @@ export const ProcessView: React.FC = () => {
             CLOSED-LOOP TOPOLOGY ADAPTATION WORKFLOW
           </h2>
           <p className="text-xs text-slate-400">
-            Patent-pending iterative loop connecting mechanical actuation, load sensing, contextual induction, and safe search pruning.
+            Patent-pending iterative loop connecting mechanical actuation, load sensing, contextual
+            induction, and safe search pruning.
           </p>
         </div>
 
@@ -123,8 +124,8 @@ export const ProcessView: React.FC = () => {
                 isCurrent
                   ? "bg-sky-950/60 border-sky-500 shadow-md ring-1 ring-sky-500/50"
                   : isDone
-                  ? "bg-slate-900/80 border-slate-800 text-slate-400"
-                  : "bg-slate-950 border-slate-900 text-slate-600 hover:border-slate-800"
+                    ? "bg-slate-900/80 border-slate-800 text-slate-400"
+                    : "bg-slate-950 border-slate-900 text-slate-600 hover:border-slate-800"
               }`}
             >
               <div className="flex items-center justify-between">
@@ -174,9 +175,7 @@ export const ProcessView: React.FC = () => {
               </div>
             </div>
 
-            <p className="text-sm font-sans text-slate-300 leading-relaxed">
-              {cur.description}
-            </p>
+            <p className="text-sm font-sans text-slate-300 leading-relaxed">{cur.description}</p>
 
             {/* Mathematical Formulation */}
             <div className="p-3.5 rounded-lg bg-slate-950 border border-slate-800/80 font-mono text-xs text-sky-300">

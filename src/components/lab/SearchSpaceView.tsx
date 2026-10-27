@@ -18,12 +18,7 @@ import {
   selectDiscriminatingProbe,
   type Pattern,
 } from "@/lib/lab/patterns";
-import {
-  solveTruss,
-  MEMBER_NAMES,
-  LOAD_CASES,
-  type LoadCaseId,
-} from "@/lib/lab/solver";
+import { solveTruss, MEMBER_NAMES, LOAD_CASES, type LoadCaseId } from "@/lib/lab/solver";
 
 interface SearchSpaceViewProps {
   currentMask: number;
@@ -50,10 +45,7 @@ export const SearchSpaceView: React.FC<SearchSpaceViewProps> = ({
     const map = new Map<number, { isPruned: boolean; matchingPatterns: Pattern[] }>();
     for (const mask of allMasks) {
       const matching = patterns.filter(
-        (p) =>
-          p.verdict === "unsafe" &&
-          p.loadCase === activeLoadCase &&
-          matchesPattern(mask, p)
+        (p) => p.verdict === "unsafe" && p.loadCase === activeLoadCase && matchesPattern(mask, p),
       );
       map.set(mask, {
         isPruned: matching.length > 0,
@@ -109,7 +101,8 @@ export const SearchSpaceView: React.FC<SearchSpaceViewProps> = ({
             TOPOLOGY SEARCH SPACE EXPLORER (64 COMBINATIONS)
           </h2>
           <p className="text-xs text-slate-400">
-            Global hypothesis space (2⁶ = 64 topologies). Evaluates combinatorial pruning across load cases.
+            Global hypothesis space (2⁶ = 64 topologies). Evaluates combinatorial pruning across
+            load cases.
           </p>
         </div>
 
@@ -139,7 +132,8 @@ export const SearchSpaceView: React.FC<SearchSpaceViewProps> = ({
               <Crosshair className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
               <div>
                 <span className="font-bold text-sky-300">
-                  OPTIMAL DISCRIMINATING PROBE SENSOR: MEMBER {MEMBER_NAMES[discriminatingProbe.index]}
+                  OPTIMAL DISCRIMINATING PROBE SENSOR: MEMBER{" "}
+                  {MEMBER_NAMES[discriminatingProbe.index]}
                 </span>
                 <p className="text-slate-300 mt-1">
                   {discriminatingProbe.reason} Maximal hypothesis variance separation:{" "}
@@ -148,7 +142,8 @@ export const SearchSpaceView: React.FC<SearchSpaceViewProps> = ({
                   </span>
                 </p>
                 <p className="text-[11px] text-slate-400 mt-0.5">
-                  Probing this specific member under {activeLoadCase} provides maximum information gain to distinguish between remaining {viableMasks.length} viable topologies.
+                  Probing this specific member under {activeLoadCase} provides maximum information
+                  gain to distinguish between remaining {viableMasks.length} viable topologies.
                 </p>
               </div>
             </div>
@@ -215,7 +210,7 @@ export const SearchSpaceView: React.FC<SearchSpaceViewProps> = ({
                 const isCurrent = m === currentMask;
                 const isInspected = m === inspectedMask;
                 const memberCount = Array.from({ length: 6 }).filter((_, i) =>
-                  Boolean(m & (1 << i))
+                  Boolean(m & (1 << i)),
                 ).length;
 
                 return (
@@ -227,10 +222,10 @@ export const SearchSpaceView: React.FC<SearchSpaceViewProps> = ({
                       isInspected
                         ? "ring-2 ring-sky-400 z-10"
                         : isCurrent
-                        ? "border-sky-500 bg-sky-950/30"
-                        : isPruned
-                        ? "bg-rose-950/20 border-rose-900/60 text-slate-500 hover:border-rose-700"
-                        : "bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700"
+                          ? "border-sky-500 bg-sky-950/30"
+                          : isPruned
+                            ? "bg-rose-950/20 border-rose-900/60 text-slate-500 hover:border-rose-700"
+                            : "bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700"
                     }`}
                   >
                     {isCurrent && (
@@ -245,9 +240,7 @@ export const SearchSpaceView: React.FC<SearchSpaceViewProps> = ({
                       >
                         #{m}
                       </span>
-                      <span className="text-[10px] text-slate-500 font-mono">
-                        {memberCount}M
-                      </span>
+                      <span className="text-[10px] text-slate-500 font-mono">{memberCount}M</span>
                     </div>
 
                     <span className="text-[9px] font-mono text-slate-500 mt-1">
@@ -382,8 +375,9 @@ export const SearchSpaceView: React.FC<SearchSpaceViewProps> = ({
                     >
                       <div className="font-bold">{pat.id}</div>
                       <div className="text-[10px] text-slate-400">
-                        Req Active: {pat.mustBeActive.map((m) => MEMBER_NAMES[m]).join(",") || "—"} |
-                        Req Inactive: {pat.mustBeInactive.map((m) => MEMBER_NAMES[m]).join(",") || "—"}
+                        Req Active: {pat.mustBeActive.map((m) => MEMBER_NAMES[m]).join(",") || "—"}{" "}
+                        | Req Inactive:{" "}
+                        {pat.mustBeInactive.map((m) => MEMBER_NAMES[m]).join(",") || "—"}
                       </div>
                     </div>
                   ))}

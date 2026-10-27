@@ -10,12 +10,7 @@ import {
   Copy,
   Check,
 } from "lucide-react";
-import {
-  createLogExport,
-  downloadFile,
-  sha256,
-  type LabEvent,
-} from "@/lib/lab/storage";
+import { createLogExport, downloadFile, sha256, type LabEvent } from "@/lib/lab/storage";
 
 interface EventLogViewProps {
   events: LabEvent[];
@@ -66,7 +61,7 @@ export const EventLogView: React.FC<EventLogViewProps> = ({
     downloadFile(
       `load-topology-event-log-${new Date().toISOString().slice(0, 10)}.json`,
       json,
-      "application/json"
+      "application/json",
     );
   };
 
@@ -86,7 +81,8 @@ export const EventLogView: React.FC<EventLogViewProps> = ({
             TAMPER-EVIDENT AUDIT TRAIL & EVENT LOG
           </h2>
           <p className="text-xs text-slate-400">
-            Chronological cryptographic ledger tracking all topology state shifts, sensor readings, and rule inductions.
+            Chronological cryptographic ledger tracking all topology state shifts, sensor readings,
+            and rule inductions.
           </p>
         </div>
 
@@ -204,17 +200,15 @@ export const EventLogView: React.FC<EventLogViewProps> = ({
                             evt.source === "hardware"
                               ? "bg-emerald-950 text-emerald-400 border border-emerald-800"
                               : evt.source === "sim"
-                              ? "bg-indigo-950 text-indigo-400 border border-indigo-800"
-                              : "bg-amber-950 text-amber-400 border border-amber-800"
+                                ? "bg-indigo-950 text-indigo-400 border border-indigo-800"
+                                : "bg-amber-950 text-amber-400 border border-amber-800"
                           }`}
                         >
                           {evt.source}
                         </span>
                       </td>
                       <td className="py-2 px-2 font-bold text-slate-200">{evt.type}</td>
-                      <td className="py-2 px-2 text-slate-300 max-w-md truncate">
-                        {evt.message}
-                      </td>
+                      <td className="py-2 px-2 text-slate-300 max-w-md truncate">{evt.message}</td>
                       <td className="py-2 px-2 text-right">
                         {evt.data ? (
                           <span className="text-[10px] text-sky-400 font-semibold underline">

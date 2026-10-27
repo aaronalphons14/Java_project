@@ -65,7 +65,8 @@ export const BenchmarkView: React.FC = () => {
             FIVE-STRATEGY QUALIFICATION BENCHMARK
           </h2>
           <p className="text-xs text-slate-400">
-            Monte Carlo statistical evaluation comparing search efficiency, false-prune rates, and safety qualification.
+            Monte Carlo statistical evaluation comparing search efficiency, false-prune rates, and
+            safety qualification.
           </p>
         </div>
 
@@ -99,7 +100,10 @@ export const BenchmarkView: React.FC = () => {
             Evidence Provenance Guarantee (simulated: true)
           </span>
           <p className="text-[11px] text-amber-300/80 mt-0.5">
-            Per laboratory architecture specifications, all benchmark trials are computed via the browser-safe simulation harness with deterministic PRNG (mulberry32). Benchmarks are strictly labelled as synthetic evidence to prevent confusion with physical serial hardware logs.
+            Per laboratory architecture specifications, all benchmark trials are computed via the
+            browser-safe simulation harness with deterministic PRNG (mulberry32). Benchmarks are
+            strictly labelled as synthetic evidence to prevent confusion with physical serial
+            hardware logs.
           </p>
         </div>
       </div>
@@ -109,7 +113,8 @@ export const BenchmarkView: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
           <div>
             <label className="text-slate-400 block mb-1">
-              Monte Carlo Trials per Strategy: <span className="text-sky-400 font-bold">{trials}</span>
+              Monte Carlo Trials per Strategy:{" "}
+              <span className="text-sky-400 font-bold">{trials}</span>
             </label>
             <input
               type="range"
@@ -239,7 +244,9 @@ export const BenchmarkView: React.FC = () => {
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <span className={`w-12 text-right font-bold ${isFull ? "text-sky-400" : "text-slate-400"}`}>
+                    <span
+                      className={`w-12 text-right font-bold ${isFull ? "text-sky-400" : "text-slate-400"}`}
+                    >
                       {s.mean.toFixed(1)}
                     </span>
                   </div>

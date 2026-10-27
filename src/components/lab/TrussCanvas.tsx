@@ -55,13 +55,13 @@ export const TrussCanvas: React.FC<TrussCanvasProps> = ({
 
   const currentLoadCase = useMemo(
     () => LOAD_CASES.find((lc) => lc.id === activeLoadCase) ?? LOAD_CASES[0]!,
-    [activeLoadCase]
+    [activeLoadCase],
   );
 
   const isStable = Boolean(solveRealized?.stable ?? solveNominal?.stable ?? false);
   const activeMemberCount = useMemo(
     () => Array.from({ length: 6 }).filter((_, i) => Boolean(mask & (1 << i))).length,
-    [mask]
+    [mask],
   );
 
   // Compute deformed node positions if available (with strict visual bounds clamping)
@@ -111,9 +111,21 @@ export const TrussCanvas: React.FC<TrussCanvasProps> = ({
         {/* Grid pattern background */}
         <g opacity="0.12" stroke="currentColor">
           <line x1={paddingX} y1={20} x2={paddingX} y2={height - 20} strokeDasharray="3 3" />
-          <line x1={width - paddingX} y1={20} x2={width - paddingX} y2={height - 20} strokeDasharray="3 3" />
+          <line
+            x1={width - paddingX}
+            y1={20}
+            x2={width - paddingX}
+            y2={height - 20}
+            strokeDasharray="3 3"
+          />
           <line x1={20} y1={paddingY} x2={width - 20} y2={paddingY} strokeDasharray="3 3" />
-          <line x1={20} y1={height - paddingY} x2={width - 20} y2={height - 20} strokeDasharray="3 3" />
+          <line
+            x1={20}
+            y1={height - paddingY}
+            x2={width - 20}
+            y2={height - 20}
+            strokeDasharray="3 3"
+          />
         </g>
 
         {/* Undeformed ghost structure */}
@@ -152,17 +164,19 @@ export const TrussCanvas: React.FC<TrussCanvasProps> = ({
           const isCompression = load < -0.1;
 
           const defectOnMember = defects.find(
-            (d) => d.enabled && d.member === i && d.loadCases.includes(activeLoadCase)
+            (d) => d.enabled && d.member === i && d.loadCases.includes(activeLoadCase),
           );
 
           // Member stroke color
           let strokeColor = "#475569"; // default inactive/neutral
-          let strokeWidth = isActive ? 5 : 2;
-          let strokeDash = isActive ? "none" : "6 4";
+          const strokeWidth = isActive ? 5 : 2;
+          const strokeDash = isActive ? "none" : "6 4";
 
           if (isActive) {
-            if (isTension) strokeColor = "#38bdf8"; // bright cyan
-            else if (isCompression) strokeColor = "#fb923c"; // warm orange
+            if (isTension)
+              strokeColor = "#38bdf8"; // bright cyan
+            else if (isCompression)
+              strokeColor = "#fb923c"; // warm orange
             else strokeColor = "#94a3b8";
           }
 
@@ -251,12 +265,7 @@ export const TrussCanvas: React.FC<TrussCanvasProps> = ({
           const [j1x, j1y] = undeformedNodes[0]!;
           return (
             <g transform={`translate(${j1x}, ${j1y})`}>
-              <polygon
-                points="0,0 -12,18 12,18"
-                fill="none"
-                stroke="#64748b"
-                strokeWidth="2"
-              />
+              <polygon points="0,0 -12,18 12,18" fill="none" stroke="#64748b" strokeWidth="2" />
               <line x1="-16" y1="20" x2="16" y2="20" stroke="#475569" strokeWidth="2" />
               <line x1="-12" y1="24" x2="-8" y2="20" stroke="#475569" strokeWidth="1.5" />
               <line x1="-4" y1="24" x2="0" y2="20" stroke="#475569" strokeWidth="1.5" />
@@ -271,12 +280,7 @@ export const TrussCanvas: React.FC<TrussCanvasProps> = ({
           const [j2x, j2y] = undeformedNodes[1]!;
           return (
             <g transform={`translate(${j2x}, ${j2y})`}>
-              <polygon
-                points="0,0 -12,14 12,14"
-                fill="none"
-                stroke="#64748b"
-                strokeWidth="2"
-              />
+              <polygon points="0,0 -12,14 12,14" fill="none" stroke="#64748b" strokeWidth="2" />
               <circle cx="-6" cy="18" r="3" fill="none" stroke="#64748b" strokeWidth="1.5" />
               <circle cx="6" cy="18" r="3" fill="none" stroke="#64748b" strokeWidth="1.5" />
               <line x1="-16" y1="23" x2="16" y2="23" stroke="#475569" strokeWidth="2" />
